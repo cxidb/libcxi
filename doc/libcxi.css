@@ -1,0 +1,23 @@
+#footer .left
+{
+position: absolute;
+left: 2.0em;
+}
+
+#footer .right
+{
+position: absolute;
+right: 2.0em;
+}
+
+span.db
+{
+    font-family: "Gill Sans", "Century Gothic",  "Futura", "URW Gothic L", "Trebuchet MS", sans-serif;  
+    color: #1d6186;   
+}
+span.cxi
+{
+    font-family: "Gill Sans", "Century Gothic",  "Futura", "URW Gothic L", "Trebuchet MS", sans-serif;  
+    font-weight: lighter;
+    color: #d28325;
+}
