@@ -721,13 +721,7 @@ CXI_Dataset * cxi_open_dataset(CXI_Dataset_Reference * ref){
   dataset->dimension_count = H5Sget_simple_extent_ndims(s);
   dataset->dimensions = calloc(sizeof(hsize_t),dataset->dimension_count);
   H5Sget_simple_extent_dims(s,dataset->dimensions,NULL);     
-  dataset->size = 1;
-  for(int i = 0;i<dataset->dimension_count;i++){
-    dataset->size *= dataset->dimensions[i];
-  }
-  dataset->slice_size = dataset->size/dataset->dimensions[0];
-  dataset->slice_count = dataset->dimensions[0];
-  dataset->datatype = H5Dget_type(dataset->handle);
+  dataset->data_type = H5Dget_type(dataset->handle);
   ref->dataset = dataset;
   return dataset;
 }
@@ -740,7 +734,7 @@ static void cxi_close_dataset(CXI_Dataset_Reference * ref){
   CXI_Dataset * dataset = ref->dataset;
   if(dataset){
     H5Dclose(dataset->handle);
-    H5Tclose(dataset->datatype);
+    H5Tclose(dataset->data_type);
     free(dataset->dimensions);
     free(dataset);
   }
@@ -874,8 +868,8 @@ CXI_Image * cxi_open_image(CXI_Image_Reference * ref){
     
   }
 
-  try_copy_string(image->handle, "data_space",&image->data_space);
-  try_copy_string(image->handle, "data_type",&image->data_type);
+  //  try_copy_string(image->handle, "data_space",&image->data_space);
+  //  try_copy_string(image->handle, "data_type",&image->data_type);
   try_copy_int(image->handle, "dimensionality",&image->dimensionality);
   try_copy_float_array(image->handle, "image_center",image->image_center,3);
 
@@ -1349,7 +1343,7 @@ CXI_Dataset_Reference * cxi_create_dataset(hid_t loc, CXI_Dataset * dataset,
   char * name = dataset_type_to_name(type);
   hid_t dataspace = H5Screate_simple(dataset->dimension_count,
 				     dataset->dimensions, NULL );
-  hid_t handle = H5Dcreate(loc,name, dataset->datatype, dataspace,  
+  hid_t handle = H5Dcreate(loc,name, dataset->data_type, dataspace,  
 			   H5P_DEFAULT,H5P_DEFAULT,H5P_DEFAULT);
   if(handle < 0){
     return NULL;

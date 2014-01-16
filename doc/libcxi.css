@@ -21,3 +21,31 @@ span.cxi
     font-weight: lighter;
     color: #d28325;
 }
+
+div.fragment
+{
+    padding: 8px;
+    background-color: #F4F6F7;
+#    border-color: #D4D6D7;
+    margin: 8px;
+    border-radius: 4px;
+}
+
+code
+{
+    color: #d28325;
+
+}
+
+span.blue
+{
+    color: #1d6186;   
+    font-weight: bolder;
+    font-family: monospace;
+}
+span.orange
+{
+    color: #d28325;
+    font-weight: bolder;
+    font-family: monospace;
+}
