@@ -1,0 +1,12 @@
+var searchData=
+[
+  ['parent_5fhandle',['parent_handle',['../struct_c_x_i___dataset___reference.html#a3f7068088a7206f1f6ab827e67fca620',1,'CXI_Dataset_Reference::parent_handle()'],['../struct_c_x_i___process___reference.html#a652a798db310c1e13e94efe8e5660d7c',1,'CXI_Process_Reference::parent_handle()'],['../struct_c_x_i___attenuator___reference.html#a721ca41788f3d3fc8f69623028da3420',1,'CXI_Attenuator_Reference::parent_handle()'],['../struct_c_x_i___geometry___reference.html#ab0bb5e61e9649a02796671290b1526da',1,'CXI_Geometry_Reference::parent_handle()'],['../struct_c_x_i___detector___reference.html#a72018255fe1270ac542ed6d9cea1cf26',1,'CXI_Detector_Reference::parent_handle()'],['../struct_c_x_i___source___reference.html#a9419b7a9f4a40d0d9ab73a9ccb75a22e',1,'CXI_Source_Reference::parent_handle()'],['../struct_c_x_i___monochromator___reference.html#a9db1afaa606cf0862c736f9397da9b03',1,'CXI_Monochromator_Reference::parent_handle()'],['../struct_c_x_i___instrument___reference.html#ac007f390099f801a383715ea8881709e',1,'CXI_Instrument_Reference::parent_handle()'],['../struct_c_x_i___data___reference.html#aa7708391ac1ac248e55bf032f7b26856',1,'CXI_Data_Reference::parent_handle()'],['../struct_c_x_i___image___reference.html#ae5b575e9d42793730f73e9b311db9775',1,'CXI_Image_Reference::parent_handle()'],['../struct_c_x_i___sample___reference.html#a56440ec511b41f80c8ab79eb1a086835',1,'CXI_Sample_Reference::parent_handle()'],['../struct_c_x_i___entry___reference.html#a8d793be976ee3ba43119c0b206fe55d5',1,'CXI_Entry_Reference::parent_handle()']]],
+  ['process',['process',['../struct_c_x_i___process___reference.html#aa3e970d9de68bb2f5d35125f4317beaa',1,'CXI_Process_Reference']]],
+  ['process_5fcount',['process_count',['../struct_c_x_i___image.html#a3cb1cff510e021fa5a6e1bdab3e96d1d',1,'CXI_Image']]],
+  ['processs',['processs',['../struct_c_x_i___image.html#ad1c1e6d4d09800c180f134c3e3d8e79a',1,'CXI_Image']]],
+  ['program_5fname',['program_name',['../struct_c_x_i___entry.html#a1f7e1d1b77ef40d6a89b0986dcbb90b7',1,'CXI_Entry']]],
+  ['pulse_5fenergy',['pulse_energy',['../struct_c_x_i___source.html#ae1e71909297209a807f0fd51a01851d2',1,'CXI_Source']]],
+  ['pulse_5fenergy_5fvalid',['pulse_energy_valid',['../struct_c_x_i___source.html#a17ca9aa6b0573c58ed961fd693cac84a',1,'CXI_Source']]],
+  ['pulse_5fwidth',['pulse_width',['../struct_c_x_i___source.html#a18c00be279fb34306210ae1750cf020b',1,'CXI_Source']]],
+  ['pulse_5fwidth_5fvalid',['pulse_width_valid',['../struct_c_x_i___source.html#aff5be68e181f09f731aa524b14f72991',1,'CXI_Source']]]
+];
