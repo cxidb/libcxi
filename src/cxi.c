@@ -1410,3 +1410,20 @@ int cxi_write_dataset_slice(CXI_Dataset * dataset,unsigned int slice, void * dat
 
   return 0;
 }
+
+hsize_t cxi_dataset_length(CXI_Dataset * dataset){
+  if(!dataset){
+    return 0;
+  }
+  if(!dataset->dimensions){
+    return 0;
+  }
+  if(dataset->dimension_count <= 0){
+    return 0;
+  }
+  hsize_t ret = 1;
+  for(int i = 0;i<dataset->dimension_count;i++){
+    ret *= dataset->dimensions[i];
+  }
+  return ret;
+}

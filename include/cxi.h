@@ -5,7 +5,7 @@
  * \p <span class="orange">lib</span><span class="blue">cxi</span> is a C library intended to help you to read and write [CXI files](http://cxidb.org/cxi.html).
  * 
  *
- * \section install_sec Installation
+ * \section install_sec 1. Installation
  *
  * \subsection step1 Step 1: Obtaining the source
  *
@@ -31,13 +31,14 @@
  * - The library should now be built inside the \p src directory.
  *
  *
- * \section reading_cxi Reading CXI files
+ * \section reading_cxi 2. Reading CXI files
  *
- * <span class="orange">lib</span><span class="blue">cxi</span> implements a hierarchichal approach to reading CXI files, opening only one group of the HDF5 tree at a time. The following example shows how to read a simple file.
-~~~{.c}
-
-~~~
-
+ * \subsection reading_minimal_cxi 2.1 Reading a minimal CXI file
+ *
+ * <span class="orange">lib</span><span class="blue">cxi</span> implements a hierarchichal approach to reading CXI files, opening only one group of the HDF5 tree at a time. The following example shows how to read a simple file:
+ *
+ * \include examples/simple_reader.c
+ *
  */
 #pragma once 
 
@@ -1019,6 +1020,15 @@ extern "C"{
    *
    */
   int cxi_write_dataset_slice(CXI_Dataset * dataset, unsigned int slice, void * data, hid_t data_type);
+
+
+  /*! Calculate the total number of elements in a dataset
+   *
+   * \param dataset The \p dataset used to calculate the size.
+   *
+   * \return The total number of element in the dataset.
+   */
+  hsize_t cxi_dataset_length(CXI_Dataset * dataset);
 
 #ifdef __cplusplus 
 } /* extern "C" */
