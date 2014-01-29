@@ -3,12 +3,12 @@
 #include <cxi.h>
 
 int main(int argc, char ** argv){
-  char * filename = "typical_raw.cxi";
+  char * filename = "simple.cxi";
   if(argc >= 2){
     if(strcmp(argv[1],"-h") == 0){
       printf("Usage: simple_writer [output filename]\n\n");
 
-      printf("By default the output filename is \"typical_raw.cxi\"\n");
+      printf("By default the output filename is \"simple.cxi\"\n");
       return 0;
     }else{
       filename = argv[1];

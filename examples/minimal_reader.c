@@ -4,7 +4,7 @@
 
 /* We'll skimp on the error checking for the sake of clarity */
 int main(void){
-  char * filename = "simple.cxi";
+  char * filename = "../data/simple.cxi";
   /* Open the CXI file for reading */
   CXI_File * file = cxi_open_file(filename,"r");
 

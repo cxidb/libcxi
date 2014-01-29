@@ -49,3 +49,16 @@ span.orange
     font-weight: bolder;
     font-family: monospace;
 }
+
+div.image
+{
+    text-align: left;
+}
+
+div.image img[src="minimal_cxi.png"]{ 
+    width:400px; 
+}
+
+div.image img[src="lcls_camp_cxi.png"]{ 
+    width:600px; 
+}

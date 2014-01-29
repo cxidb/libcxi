@@ -35,19 +35,32 @@
  *
  * \subsection reading_minimal_cxi 2.1 Reading a minimal CXI file
  *
- * <span class="orange">lib</span><span class="blue">cxi</span> implements a hierarchichal approach to reading CXI files, opening only one group of the HDF5 tree at a time. The following example shows how to read a simple file:
+ * <span class="orange">lib</span><span class="blue">cxi</span> implements a hierarchichal approach to
+ * reading CXI files, opening only one group of the HDF5 tree at a time. First we'll try to read a minimal
+ * CXI file, which is structured as shown in the image below. 
+ * ![Fig 1. Diagram of a minimal CXI file with a single image](@ref minimal_cxi.png)
  *
- * \include examples/simple_reader.c
+ *
+ * The following example shows how to read such a file:
+ *
+ * \include examples/minimal_reader.c
  *
  * \subsection reading_typical_cxi 2.2 Reading a more typical CXI file
+ * Here we show how to read a more typical CXI file.
+ * ![Fig 2. Diagram of a typical CXI file for storing raw data from a single shot.](@ref lcls_camp_cxi.png)
  *
+ * And now the code to read it:
  * \include examples/typical_reader.c
  *
  * \section writing_cxi 3. Writing CXI files
  *
  * \subsection writing_minimal_cxi 3.1 Writing a minimal CXI file
  *
- * \include examples/simple_writer.c
+ * \include examples/minimal_writer.c
+ *
+ * \subsection writing_typical_cxi 3.2 Writing a typical CXI file
+ *
+ * \include examples/typical_writer.c
  *
  */
 #pragma once 
