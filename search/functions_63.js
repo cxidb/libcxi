@@ -19,6 +19,7 @@ var searchData=
   ['cxi_5fwrite_5fdata',['cxi_write_data',['../cxi_8h.html#a72db6b7ce23c0634d9d72eba116bd5d2',1,'cxi.c']]],
   ['cxi_5fwrite_5fdataset',['cxi_write_dataset',['../cxi_8h.html#ac751ae8cf34497773a50f75d994898a9',1,'cxi.c']]],
   ['cxi_5fwrite_5fdataset_5fslice',['cxi_write_dataset_slice',['../cxi_8h.html#aa9b7afb35bc30c346a1cbf6e88578c99',1,'cxi.c']]],
+  ['cxi_5fwrite_5fdetector',['cxi_write_detector',['../cxi_8h.html#a92949a4f9dbc0073249bdc4e05316a6e',1,'cxi.c']]],
   ['cxi_5fwrite_5fentry',['cxi_write_entry',['../cxi_8h.html#a83ac23a0c0975df23e76dde487a5b1c0',1,'cxi.c']]],
   ['cxi_5fwrite_5fimage',['cxi_write_image',['../cxi_8h.html#aae0edc8fb0722b74a99b43048440a128',1,'cxi.c']]],
   ['cxi_5fwrite_5finstrument',['cxi_write_instrument',['../cxi_8h.html#a276fab14b17289616769f17e7e745915',1,'cxi.c']]],
