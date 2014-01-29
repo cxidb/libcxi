@@ -11,7 +11,7 @@ var searchData=
   ['cxi_5fentry',['CXI_Entry',['../cxi_8h.html#aa1b79068e476cd5164c5d6ee17ce5fc2',1,'cxi.h']]],
   ['cxi_5fentry_5freference',['CXI_Entry_Reference',['../cxi_8h.html#a0fe6d4ddf39a907400acebb6f2b60a71',1,'cxi.h']]],
   ['cxi_5ffile',['CXI_File',['../cxi_8h.html#a3b3b7f5118761a5fb02aa1bd7b0a1bdc',1,'cxi.h']]],
-  ['cxi_5fgeometry',['CXI_Geometry',['../cxi_8h.html#aed6ca518f7ce216c822affaa51c82318',1,'cxi.h']]],
+  ['cxi_5fgeometry',['CXI_Geometry',['../group__writing.html#gaed6ca518f7ce216c822affaa51c82318',1,'cxi.h']]],
   ['cxi_5fgeometry_5freference',['CXI_Geometry_Reference',['../cxi_8h.html#aadfbba47967c3cfd74916f2296a6e7bb',1,'cxi.h']]],
   ['cxi_5fimage',['CXI_Image',['../cxi_8h.html#a9c9ae9c072b84f3440783ca9e9a2abb1',1,'cxi.h']]],
   ['cxi_5fimage_5freference',['CXI_Image_Reference',['../cxi_8h.html#ab383cf7fd239dcaf0caf49073ca5ed6b',1,'cxi.h']]],

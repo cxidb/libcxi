@@ -19,5 +19,6 @@ var searchData=
   ['dimensionality_5fvalid',['dimensionality_valid',['../struct_c_x_i___image.html#a6dbbd2167d4ae1f73a705e61d7a28acb',1,'CXI_Image']]],
   ['dimensions',['dimensions',['../struct_c_x_i___dataset.html#a64af1793871218c6ef31fd57652ba001',1,'CXI_Dataset']]],
   ['distance',['distance',['../struct_c_x_i___attenuator.html#a29c2609f8a4f7807ec50b434c143ac5c',1,'CXI_Attenuator::distance()'],['../struct_c_x_i___detector.html#ad82291b636b8271a348f8613df4d598e',1,'CXI_Detector::distance()']]],
-  ['distance_5fvalid',['distance_valid',['../struct_c_x_i___attenuator.html#ad4067310a26d116a68dbe17fb09e49f4',1,'CXI_Attenuator::distance_valid()'],['../struct_c_x_i___detector.html#a5c61e432be5648726d046deb188d776d',1,'CXI_Detector::distance_valid()']]]
+  ['distance_5fvalid',['distance_valid',['../struct_c_x_i___attenuator.html#ad4067310a26d116a68dbe17fb09e49f4',1,'CXI_Attenuator::distance_valid()'],['../struct_c_x_i___detector.html#a5c61e432be5648726d046deb188d776d',1,'CXI_Detector::distance_valid()']]],
+  ['dataset_20utilities',['Dataset Utilities',['../group__utility.html',1,'']]]
 ];
