@@ -6,6 +6,8 @@ if(CMAKE_COMPILER_IS_GNUCC)
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -std=c99 -W")
 endif(CMAKE_COMPILER_IS_GNUCC)
 
+set(CMAKE_C_FLAGS_DEBUG "-DCXI_DEBUG")
+
 find_package(HDF5 REQUIRED)
 include_directories(${HDF5_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/include)
 add_library(cxi SHARED src/cxi.c include/cxi.h)

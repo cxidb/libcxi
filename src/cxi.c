@@ -5,11 +5,14 @@
 #include <stdarg.h>
 
 
-#if 1 || defined __CXI_DEBUG 
+#if defined CXI_DEBUG 
 #define  cxi_debug(...) _cxi_debug(__FILE__,__LINE__,__VA_ARGS__)
 #else  
 #define  cxi_debug(...) 
 #endif 
+
+#define  cxi_warning(...) _cxi_warning(__FILE__,__LINE__,__VA_ARGS__)
+
 
 
 static int CXI_VERSION = 130;
@@ -18,6 +21,15 @@ static void _cxi_debug(char * file, int line, char *format, ...){
   va_list ap;
   va_start(ap,format);
   fprintf(stderr, "libcxi debug: ");
+  vfprintf(stderr, format, ap);
+  fprintf(stderr, " in %s:%d\n",file,line);
+  va_end(ap);
+}
+
+static void _cxi_warning(char * file, int line, char *format, ...){
+  va_list ap;
+  va_start(ap,format);
+  fprintf(stderr, "libcxi warning: ");
   vfprintf(stderr, format, ap);
   fprintf(stderr, " in %s:%d\n",file,line);
   va_end(ap);
@@ -651,7 +663,7 @@ CXI_Detector * cxi_open_detector(CXI_Detector_Reference * ref){
   /* Search for Geometry groups */
   n = find_max_suffix(detector->handle, "geometry");
   if(n > 1){
-    cxi_debug("Warning: Opened detector with multiple geometries");
+    cxi_warning("Opened detector with multiple geometries");
   }
   for(int i = 0;i<n;i++){
     detector->geometry = calloc(sizeof(CXI_Geometry_Reference),1);
@@ -1027,11 +1039,11 @@ CXI_Entry_Reference * cxi_write_entry(hid_t loc, CXI_Entry * entry){
   }
   /* Check date format */
   if(entry->end_time && !follows_iso8601(entry->end_time)){
-    cxi_debug("CXI_Entry->end_time: %s does not follow ISO8601",entry->end_time);
+    cxi_warning("CXI_Entry->end_time: %s does not follow ISO8601",entry->end_time);
     return NULL;
   }
   if(entry->start_time && !follows_iso8601(entry->start_time)){
-    cxi_debug("CXI_Entry->start_time: %s does not follow ISO8601",entry->start_time);
+    cxi_warning("CXI_Entry->start_time: %s does not follow ISO8601",entry->start_time);
     return NULL;
   }
 
@@ -1074,7 +1086,7 @@ CXI_Entry_Reference * cxi_write_entry(hid_t loc, CXI_Entry * entry){
       if(entry->data[i]->data){
 	cxi_write_data(entry->handle,entry->data[i]->data);
       }else{
-	cxi_debug("Warning: Data Reference data[%d] has NULL data pointer\n", i);
+	cxi_warning("Data Reference data[%d] has NULL data pointer\n", i);
       }
     }
   }
@@ -1083,7 +1095,7 @@ CXI_Entry_Reference * cxi_write_entry(hid_t loc, CXI_Entry * entry){
       if(entry->images[i]->image){
 	cxi_write_image(entry->handle,entry->images[i]->image);
       }else{
-	cxi_debug("Warning: Image Reference images[%d] has NULL image pointer\n", i);
+	cxi_warning(" Image Reference images[%d] has NULL image pointer\n", i);
       }
     }
   }
@@ -1092,7 +1104,7 @@ CXI_Entry_Reference * cxi_write_entry(hid_t loc, CXI_Entry * entry){
       if(entry->instruments[i]->instrument){
 	cxi_write_instrument(entry->handle,entry->instruments[i]->instrument);
       }else{
-	cxi_debug("Warning: Instrument Reference instruments[%d] has NULL instrument pointer\n", i);
+	cxi_warning("Instrument Reference instruments[%d] has NULL instrument pointer\n", i);
       }
     }
   }
@@ -1102,7 +1114,7 @@ CXI_Entry_Reference * cxi_write_entry(hid_t loc, CXI_Entry * entry){
       if(entry->samples[i]->sample){
 	cxi_write_sample(entry->handle,entry->samples[i]->sample);
       }else{
-	cxi_debug("Warning: Sample Reference samples[%d] has NULL sample pointer\n", i);
+	cxi_warning("Sample Reference samples[%d] has NULL sample pointer\n", i);
       }
     }
   }
