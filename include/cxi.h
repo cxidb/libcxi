@@ -916,6 +916,14 @@ extern "C"{
    * \return A reference to the \p image created or NULL in case of error.
    */
   CXI_Image_Reference * cxi_write_image(hid_t loc, CXI_Image * image);
+  /*! Write a detector group.
+   * 
+   * \param loc An HDF5 identifier specifying the location where the dataset will be created.
+   * \param detector A filled structure which determines the properties of the created detector.
+   *
+   * \return A reference to the \p image created or NULL in case of error.
+   */
+  CXI_Detector_Reference * cxi_write_detector(hid_t loc, CXI_Detector * detector);
   /*! Write a instrument group.
    * 
    * \param loc An HDF5 identifier specifying the location where the dataset will be created.

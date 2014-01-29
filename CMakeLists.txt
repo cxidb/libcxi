@@ -20,11 +20,14 @@ target_link_libraries(writer ${HDF5_LIBRARIES})
 add_executable(typical_reader  src/cxi.c examples/typical_reader.c)
 target_link_libraries(typical_reader ${HDF5_LIBRARIES})
 
-add_executable(simple_reader  src/cxi.c examples/simple_reader.c)
-target_link_libraries(simple_reader ${HDF5_LIBRARIES})
+add_executable(typical_writer  src/cxi.c examples/typical_writer.c)
+target_link_libraries(typical_writer ${HDF5_LIBRARIES})
 
-add_executable(simple_writer  src/cxi.c examples/simple_writer.c)
-target_link_libraries(simple_writer ${HDF5_LIBRARIES})
+add_executable(minimal_reader  src/cxi.c examples/minimal_reader.c)
+target_link_libraries(minimal_reader ${HDF5_LIBRARIES})
+
+add_executable(minimal_writer  src/cxi.c examples/minimal_writer.c)
+target_link_libraries(minimal_writer ${HDF5_LIBRARIES})
 
 
 enable_testing()

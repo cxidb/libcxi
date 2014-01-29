@@ -139,7 +139,7 @@ static int array_total_size(hid_t dataset){
    return size;
 }
 
-static int try_copy_string(hid_t loc, char * name, char ** dest){
+static int try_read_string(hid_t loc, char * name, char ** dest){
   if(H5Lexists(loc,name,H5P_DEFAULT)){
     hid_t ds = H5Dopen(loc,name,H5P_DEFAULT);
     hid_t t = H5Dget_type(ds);
@@ -154,7 +154,22 @@ static int try_copy_string(hid_t loc, char * name, char ** dest){
   return 0;
 }
 
-static int try_copy_float(hid_t loc, char * name, double * dest){
+static int try_write_string(hid_t loc, char * name, char * values){
+  hid_t space = H5Screate(H5S_SCALAR);
+  if(space < 0) return space;
+  hid_t datatype = H5Tcopy(H5T_C_S1);
+  if(datatype < 0) return space;
+  H5Tset_size(datatype, strlen(values));
+  hid_t ds = H5Dcreate(loc,name,datatype,space,H5P_DEFAULT,H5P_DEFAULT,H5P_DEFAULT);
+  if(ds < 0) return ds;
+  herr_t status = H5Sclose(space);
+  if(status < 0) return status;    
+  status = H5Dwrite(ds,datatype,H5S_ALL,H5S_ALL,H5P_DEFAULT,values);
+  if(status < 0) return status;    
+  return H5Dclose(ds);
+}
+
+static int try_read_float(hid_t loc, char * name, double * dest){
   if(H5Lexists(loc,name,H5P_DEFAULT)){
     hid_t ds = H5Dopen(loc,name,H5P_DEFAULT);
     hid_t t = H5Dget_type(ds);
@@ -170,7 +185,19 @@ static int try_copy_float(hid_t loc, char * name, double * dest){
   return 0;
 }
 
-static int try_copy_int(hid_t loc, char * name, int * dest){
+static int try_write_float(hid_t loc, char * name, double value){
+  hid_t space = H5Screate(H5S_SCALAR);
+  if(space < 0) return space;
+  hid_t ds = H5Dcreate(loc,name,H5T_NATIVE_FLOAT,space,H5P_DEFAULT,H5P_DEFAULT,H5P_DEFAULT);
+  if(ds < 0) return ds;
+  herr_t status = H5Sclose(space);
+  if(status < 0) return status;    
+  status = H5Dwrite(ds,H5T_NATIVE_DOUBLE,H5S_ALL,H5S_ALL,H5P_DEFAULT,&value);
+  if(status < 0) return status;    
+  return H5Dclose(ds);
+}
+
+static int try_read_int(hid_t loc, char * name, int * dest){
   if(H5Lexists(loc,name,H5P_DEFAULT)){
     hid_t ds = H5Dopen(loc,name,H5P_DEFAULT);
     hid_t t = H5Dget_type(ds);
@@ -186,7 +213,7 @@ static int try_copy_int(hid_t loc, char * name, int * dest){
   return 0;
 }
 
-static int try_copy_float_array(hid_t loc, char * name, double * dest, int size){
+static int try_read_float_array(hid_t loc, char * name, double * dest, int size){
   if(H5Lexists(loc,name,H5P_DEFAULT)){
     hid_t ds = H5Dopen(loc,name,H5P_DEFAULT);
     hid_t t = H5Dget_type(ds);
@@ -202,29 +229,40 @@ static int try_copy_float_array(hid_t loc, char * name, double * dest, int size)
   return 0;
 }
 
-/*
-static int try_copy_dataset(hid_t loc, char * name, CXI_Dataset ** dest){
-  if(!H5Lexists(loc,name,H5P_DEFAULT)){
-    return 0;
-  }
-  cxi_debug("opening dataset");
-  *dest = calloc(sizeof(CXI_Dataset),1);
-  CXI_Dataset * ds = *dest;
-  ds->handle = H5Dopen(loc,name,H5P_DEFAULT);
-
-  hid_t s = H5Dget_space(ds->handle);
-  ds->dimension_count = H5Sget_simple_extent_ndims(s);
-  ds->dimensions = calloc(sizeof(hsize_t),ds->dimension_count);
-  H5Sget_simple_extent_dims(s,ds->dimensions,NULL);     
-  ds->size = 1;
-  for(int i = 0;i<ds->dimension_count;i++){
-    ds->size *= ds->dimensions[i];
-  }
-  ds->slice_size = ds->size/ds->dimensions[0];
-  ds->datatype = H5Dget_type(ds->handle);
-  return 1;
+static int try_write_float_array(hid_t loc, char * name, double * values, int ndims, hsize_t * dims){
+  hid_t space = H5Screate_simple(ndims,dims,NULL);
+  if(space < 0) return space;
+  hid_t ds = H5Dcreate(loc,name,H5T_NATIVE_FLOAT,space,H5P_DEFAULT,H5P_DEFAULT,H5P_DEFAULT);
+  if(ds < 0) return ds;
+  herr_t status = H5Sclose(space);
+  if(status < 0) return status;    
+  status = H5Dwrite(ds,H5T_NATIVE_DOUBLE,H5S_ALL,H5S_ALL,H5P_DEFAULT,values);
+  if(status < 0) return status;    
+  return H5Dclose(ds);
 }
-*/
+
+static int try_write_float_1D_array(hid_t loc, char * name, double * values, int dim){
+  hsize_t dims[1];
+  dims[0] = dim;
+  return try_write_float_array(loc, name, values, 1, dims);
+}
+
+static int try_write_float_2D_array(hid_t loc, char * name, double * values, int slow_dim, int fast_dim){
+  hsize_t dims[2];
+  dims[0] = slow_dim;
+  dims[1] = fast_dim;
+  return try_write_float_array(loc, name, values, 2, dims);
+}
+
+static int try_write_float_3D_array(hid_t loc, char * name, double * values, int slow_dim, int middle_dim, int fast_dim){
+  hsize_t dims[3];
+  dims[0] = slow_dim;
+  dims[1] = middle_dim;
+  dims[2] = fast_dim;
+  return try_write_float_array(loc, name, values, 3, dims);
+}
+
+
 
 CXI_Data * cxi_open_data(CXI_Data_Reference * ref){
   cxi_debug("opening data");
@@ -299,7 +337,7 @@ CXI_File * cxi_open_file(const char * filename, const char * mode){
     }
     /* Read the CXI verion */
     file->cxi_version = -1;
-    try_copy_int(file->handle, "cxi_version",&file->cxi_version);
+    try_read_int(file->handle, "cxi_version",&file->cxi_version);
     if(file->cxi_version < 0){
       /* Warning: Could not read CXI version */
     }else if(file->cxi_version >= CXI_VERSION){
@@ -416,12 +454,12 @@ CXI_Entry * cxi_open_entry(CXI_Entry_Reference * ref){
   }
 
   /* Now lets try to fill in whatever we can */
-  try_copy_string(entry->handle, "end_time",&entry->end_time);
-  try_copy_string(entry->handle, "experiment_identifier",&entry->experiment_identifier);
-  try_copy_string(entry->handle, "experiment_description",&entry->experiment_description);
-  try_copy_string(entry->handle, "program_name",&entry->program_name);
-  try_copy_string(entry->handle, "start_time",&entry->start_time);
-  try_copy_string(entry->handle, "title",&entry->title);
+  try_read_string(entry->handle, "end_time",&entry->end_time);
+  try_read_string(entry->handle, "experiment_identifier",&entry->experiment_identifier);
+  try_read_string(entry->handle, "experiment_description",&entry->experiment_description);
+  try_read_string(entry->handle, "program_name",&entry->program_name);
+  try_read_string(entry->handle, "start_time",&entry->start_time);
+  try_read_string(entry->handle, "title",&entry->title);
   return entry;
 }
 
@@ -522,7 +560,7 @@ CXI_Instrument * cxi_open_instrument(CXI_Instrument_Reference * ref){
 
 
   /* Now lets try to fill in whatever we can */
-  try_copy_string(instrument->handle, "name",&instrument->name);
+  try_read_string(instrument->handle, "name",&instrument->name);
   return instrument;
 }
 
@@ -570,10 +608,10 @@ CXI_Source * cxi_open_source(CXI_Source_Reference * ref){
   }
   ref->source = source;
 
-  try_copy_string(source->handle, "name",&source->name);
-  source->energy_valid = try_copy_float(source->handle, "energy",&source->energy);
-  source->pulse_energy_valid = try_copy_float(source->handle, "pulse_energy",&source->pulse_energy);
-  source->pulse_width_valid = try_copy_float(source->handle, "pulse_width",&source->pulse_width);
+  try_read_string(source->handle, "name",&source->name);
+  source->energy_valid = try_read_float(source->handle, "energy",&source->energy);
+  source->pulse_energy_valid = try_read_float(source->handle, "pulse_energy",&source->pulse_energy);
+  source->pulse_width_valid = try_read_float(source->handle, "pulse_width",&source->pulse_width);
 
   return source;
 }
@@ -624,21 +662,21 @@ CXI_Detector * cxi_open_detector(CXI_Detector_Reference * ref){
   }
 
 
-  detector->corner_position_valid = try_copy_float_array(detector->handle, 
+  detector->corner_position_valid = try_read_float_array(detector->handle, 
 							 "corner_position",
 							 (double *)detector->corner_position,3);
-  detector->counts_per_joule_valid = try_copy_float(detector->handle,
+  detector->counts_per_joule_valid = try_read_float(detector->handle,
 						    "counts_per_joule",
 						    &detector->counts_per_joule);
-  detector->data_sum_valid = try_copy_float(detector->handle, "data_sum",
+  detector->data_sum_valid = try_read_float(detector->handle, "data_sum",
 					    &detector->data_sum);
-  try_copy_string(detector->handle, "description",&detector->description);
-  detector->distance_valid = try_copy_float(detector->handle, 
+  try_read_string(detector->handle, "description",&detector->description);
+  detector->distance_valid = try_read_float(detector->handle, 
 					    "distance",&detector->distance);
-  detector->x_pixel_size_valid = try_copy_float(detector->handle,
+  detector->x_pixel_size_valid = try_read_float(detector->handle,
 						"x_pixel_size",
 						&detector->x_pixel_size);
-  detector->y_pixel_size_valid = try_copy_float(detector->handle,
+  detector->y_pixel_size_valid = try_read_float(detector->handle,
 						"y_pixel_size",
 						&detector->y_pixel_size);
   if(!detector->x_pixel_size_valid){
@@ -649,7 +687,7 @@ CXI_Detector * cxi_open_detector(CXI_Detector_Reference * ref){
     detector->y_pixel_size = 1;
   }
 
-  detector->basis_vectors_valid = try_copy_float_array(detector->handle,
+  detector->basis_vectors_valid = try_read_float_array(detector->handle,
 						       "basis_vectors",
 						       (double *)detector->basis_vectors,6);
   if(!detector->basis_vectors_valid){
@@ -773,11 +811,11 @@ CXI_Attenuator * cxi_open_attenuator(CXI_Attenuator_Reference * ref){
     return NULL;
   }
   ref->attenuator = attenuator;  
-  attenuator->distance_valid = try_copy_float(attenuator->handle, "distance",&attenuator->distance);
-  attenuator->thickness_valid = try_copy_float(attenuator->handle, "thickness",&attenuator->thickness);
-  attenuator->attenuator_transmission_valid = try_copy_float(attenuator->handle, "attenuator_transmission",
+  attenuator->distance_valid = try_read_float(attenuator->handle, "distance",&attenuator->distance);
+  attenuator->thickness_valid = try_read_float(attenuator->handle, "thickness",&attenuator->thickness);
+  attenuator->attenuator_transmission_valid = try_read_float(attenuator->handle, "attenuator_transmission",
 							     &attenuator->attenuator_transmission);
-  try_copy_string(attenuator->handle, "type",&attenuator->type);
+  try_read_string(attenuator->handle, "type",&attenuator->type);
 
 
   return attenuator;
@@ -812,8 +850,8 @@ CXI_Monochromator * cxi_open_monochromator(CXI_Monochromator_Reference * ref){
     return NULL;
   }
   ref->monochromator = monochromator;  
-  monochromator->energy_valid = try_copy_float(monochromator->handle, "energy",&monochromator->energy);
-  monochromator->energy_error = try_copy_float(monochromator->handle, "energy_error",&monochromator->energy_error);
+  monochromator->energy_valid = try_read_float(monochromator->handle, "energy",&monochromator->energy);
+  monochromator->energy_error = try_read_float(monochromator->handle, "energy_error",&monochromator->energy_error);
   return monochromator;
 }
 
@@ -882,10 +920,10 @@ CXI_Image * cxi_open_image(CXI_Image_Reference * ref){
     
   }
 
-  //  try_copy_string(image->handle, "data_space",&image->data_space);
-  //  try_copy_string(image->handle, "data_type",&image->data_type);
-  image->dimensionality_valid = try_copy_int(image->handle, "dimensionality",&image->dimensionality);
-  image->image_center_valid = try_copy_float_array(image->handle, "image_center",image->image_center,3);
+  //  try_read_string(image->handle, "data_space",&image->data_space);
+  //  try_read_string(image->handle, "data_type",&image->data_type);
+  image->dimensionality_valid = try_read_int(image->handle, "dimensionality",&image->dimensionality);
+  image->image_center_valid = try_read_float_array(image->handle, "image_center",image->image_center,3);
 
   return image;
 }
@@ -1013,83 +1051,23 @@ CXI_Entry_Reference * cxi_write_entry(hid_t loc, CXI_Entry * entry){
   strcpy(ref->group_name,buffer);
   /* Write down all the scalars that are in the entry */
   if(entry->end_time){
-    hid_t datatype = H5Tcopy(H5T_C_S1);
-    H5Tset_size(datatype, strlen(entry->end_time));
-    hsize_t dims[1] = {1};
-    hid_t dataspace = H5Screate_simple(1, dims, NULL);
-    hid_t dataset = H5Dcreate(entry->handle, "end_time", datatype,
-			      dataspace, H5P_DEFAULT,
-			      H5P_DEFAULT, H5P_DEFAULT);
-    H5Dwrite(dataset, datatype, dataspace, dataspace, H5P_DEFAULT, entry->end_time);
-    H5Tclose(datatype);
-    H5Sclose(dataspace);
-    H5Dclose(dataset);
+    try_write_string(entry->handle, "end_time", entry->end_time);
   }
   if(entry->experiment_identifier){
-      hid_t datatype = H5Tcopy(H5T_C_S1);
-      H5Tset_size(datatype, strlen(entry->experiment_identifier));
-      hsize_t dims[1] = {1};
-      hid_t dataspace = H5Screate_simple(1, dims, NULL);
-      hid_t dataset = H5Dcreate(entry->handle, "experiment_identifier", datatype,
-				dataspace, H5P_DEFAULT,
-				H5P_DEFAULT, H5P_DEFAULT);
-      H5Dwrite(dataset, datatype, dataspace, dataspace, H5P_DEFAULT, entry->experiment_identifier);
-      H5Tclose(datatype);
-      H5Sclose(dataspace);
-      H5Dclose(dataset);
+    try_write_string(entry->handle, "experiment_identifier", entry->experiment_identifier);
   }
   if(entry->experiment_description){
-      hid_t datatype = H5Tcopy(H5T_C_S1);
-      H5Tset_size(datatype, strlen(entry->experiment_description));
-      hsize_t dims[1] = {1};
-      hid_t dataspace = H5Screate_simple(1, dims, NULL);
-      hid_t dataset = H5Dcreate(entry->handle, "experiment_description", datatype,
-				dataspace, H5P_DEFAULT,
-				H5P_DEFAULT, H5P_DEFAULT);
-      H5Dwrite(dataset, datatype, dataspace, dataspace, H5P_DEFAULT, entry->experiment_description);
-      H5Tclose(datatype);
-      H5Sclose(dataspace);
-      H5Dclose(dataset);
+    try_write_string(entry->handle, "experiment_description", entry->experiment_description);
   }
   if(entry->program_name){
-      hid_t datatype = H5Tcopy(H5T_C_S1);
-      H5Tset_size(datatype, strlen(entry->program_name));
-      hsize_t dims[1] = {1};
-      hid_t dataspace = H5Screate_simple(1, dims, NULL);
-      hid_t dataset = H5Dcreate(entry->handle, "program_name", datatype,
-				dataspace, H5P_DEFAULT,
-				H5P_DEFAULT, H5P_DEFAULT);
-      H5Dwrite(dataset, datatype, dataspace, dataspace, H5P_DEFAULT, entry->program_name);
-      H5Tclose(datatype);
-      H5Sclose(dataspace);
-      H5Dclose(dataset);
+    try_write_string(entry->handle, "program_name", entry->program_name);
   }
 
   if(entry->start_time){
-      hid_t datatype = H5Tcopy(H5T_C_S1);
-      H5Tset_size(datatype, strlen(entry->start_time));
-      hsize_t dims[1] = {1};
-      hid_t dataspace = H5Screate_simple(1, dims, NULL);
-      hid_t dataset = H5Dcreate(entry->handle, "start_time", datatype,
-				dataspace, H5P_DEFAULT,
-				H5P_DEFAULT, H5P_DEFAULT);
-      H5Dwrite(dataset, datatype, dataspace, dataspace, H5P_DEFAULT, entry->start_time);
-      H5Tclose(datatype);
-      H5Sclose(dataspace);
-      H5Dclose(dataset);
+    try_write_string(entry->handle, "start_time", entry->start_time);
   }
   if(entry->title){
-      hid_t datatype = H5Tcopy(H5T_C_S1);
-      H5Tset_size(datatype, strlen(entry->title));
-      hsize_t dims[1] = {1};
-      hid_t dataspace = H5Screate_simple(1, dims, NULL);
-      hid_t dataset = H5Dcreate(entry->handle, "title", datatype,
-				dataspace, H5P_DEFAULT,
-				H5P_DEFAULT, H5P_DEFAULT);
-      H5Dwrite(dataset, datatype, dataspace, dataspace, H5P_DEFAULT, entry->title);
-      H5Tclose(datatype);
-      H5Sclose(dataspace);
-      H5Dclose(dataset);
+    try_write_string(entry->handle, "title", entry->title);
   }
   if(entry->data){
     for(int i = 0;i<entry->data_count;i++){
@@ -1208,6 +1186,37 @@ CXI_Sample_Reference * cxi_write_sample(hid_t loc, CXI_Sample * sample){
   ref->group_name = malloc(sizeof(char)*(strlen(buffer)+1));
   ref->sample = sample;
   strcpy(ref->group_name,buffer);
+  if(sample->concentration_valid){
+    try_write_float(handle,"concentration",sample->concentration);
+  }
+  if(sample->description){
+    try_write_string(handle,"description",sample->description);
+  }
+  if(sample->mass_valid){
+    try_write_float(handle,"mass",sample->mass);
+  }
+  if(sample->name){
+    try_write_string(handle,"name",sample->name);
+  }
+
+  if(sample->temperature){
+    try_write_float(handle,"temperature",sample->temperature);
+  }
+
+  if(sample->unit_cell_valid){
+    try_write_float_2D_array(handle,"unit_cell",(double *)sample->unit_cell,2,3);
+  }
+  if(sample->unit_cell_group){
+    try_write_string(handle,"unit_cell_group",sample->unit_cell_group);
+  }
+  if(sample->thickness_valid){
+    try_write_float(handle,"thickness",sample->thickness);
+  }
+  if(sample->unit_cell_volume_valid){
+    try_write_float(handle,"unit_cell_volume",sample->unit_cell_volume);
+  }
+
+
   return ref;
 
 }
@@ -1271,6 +1280,15 @@ CXI_Source_Reference * cxi_write_source(hid_t loc, CXI_Source * source){
   ref->group_name = malloc(sizeof(char)*(strlen(buffer)+1));
   ref->source = source;
   strcpy(ref->group_name,buffer);
+  if(source->energy_valid){
+    try_write_float(handle,"energy",source->energy);
+  }
+  if(source->pulse_energy_valid){
+    try_write_float(handle,"pulse_energy",source->pulse_energy);
+  }
+  if(source->pulse_width_valid){
+    try_write_float(handle,"pulse_width",source->pulse_width);
+  }
   return ref;
 
 }
@@ -1292,6 +1310,30 @@ CXI_Detector_Reference * cxi_write_detector(hid_t loc, CXI_Detector * detector){
   ref->group_name = malloc(sizeof(char)*(strlen(buffer)+1));
   ref->detector = detector;
   strcpy(ref->group_name,buffer);
+  if(detector->basis_vectors_valid){
+    try_write_float_2D_array(handle,"basis_vectors",(double *)detector->basis_vectors,2,3);
+  }
+  if(detector->corner_position_valid){
+    try_write_float_1D_array(handle,"corner_position",(double *)detector->corner_position,3);
+  }
+  if(detector->counts_per_joule_valid){
+    try_write_float(handle,"counts_per_joule",detector->counts_per_joule);
+  }
+  if(detector->data_sum_valid){
+    try_write_float(handle,"data_sum",detector->data_sum);
+  }
+  if(detector->description){
+    try_write_string(handle,"description",detector->description);
+  }
+  if(detector->distance_valid){
+    try_write_float(handle,"distance",detector->distance);
+  }
+  if(detector->x_pixel_size_valid){
+    try_write_float(handle,"x_pixel_size",detector->x_pixel_size);
+  }
+  if(detector->y_pixel_size_valid){
+    try_write_float(handle,"y_pixel_size",detector->y_pixel_size);
+  }
   return ref;
 }
 
