@@ -100,6 +100,7 @@ Step 2: Building the library</h2>
 <p><span class="orange">lib</span><span class="blue">cxi</span> implements a hierarchichal approach to reading CXI files, opening only one group of the HDF5 tree at a time. The following example shows how to read a simple file:</p>
 <div class="fragment"><div class="line"><span class="comment">/* Include the necessary header. */</span></div>
 <div class="line"><span class="preprocessor">#include &lt;<a class="code" href="cxi_8h.html">cxi.h</a>&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
 <div class="line"></div>
 <div class="line"><span class="comment">/* We&#39;ll skimp on the error checking for the sake of clarity */</span></div>
 <div class="line"><span class="keywordtype">int</span> main(<span class="keywordtype">void</span>){</div>
@@ -124,13 +125,130 @@ Step 2: Building the library</h2>
 <div class="line"></div>
 <div class="line">  <span class="comment">/* Sum all the values in the image */</span></div>
 <div class="line">  <span class="keywordtype">double</span> sum = 0;</div>
-<div class="line">  <span class="keywordflow">for</span>(hsize_t i = 0;i&lt;<a class="code" href="cxi_8h.html#a69be05529d94e50ed3c11ec2e357f957">cxi_dataset_length</a>(data)){</div>
+<div class="line">  <span class="keywordflow">for</span>(hsize_t i = 0;i&lt;<a class="code" href="cxi_8h.html#a69be05529d94e50ed3c11ec2e357f957">cxi_dataset_length</a>(data);i++){</div>
 <div class="line">    sum += image[i];</div>
 <div class="line">  }</div>
 <div class="line">  printf(<span class="stringliteral">&quot;The sum of all elements of /entry_1/data_1/data is %g\n&quot;</span>,sum);</div>
 <div class="line">  <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
 <div class="line"></div>
+</div><!-- fragment --><h2><a class="anchor" id="reading_typical_cxi"></a>
+2.2 Reading a more typical CXI file</h2>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &lt;<a class="code" href="cxi_8h.html">cxi.h</a>&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
+<div class="line"></div>
+<div class="line"><span class="comment">/* We&#39;ll skimp on the error checking for the sake of clarity */</span></div>
+<div class="line"><span class="keywordtype">int</span> main(<span class="keywordtype">void</span>){</div>
+<div class="line">  <span class="keywordtype">char</span> * filename = <span class="stringliteral">&quot;../data/typical_raw.cxi&quot;</span>;</div>
+<div class="line">  <span class="comment">/* Open the CXI file for reading */</span></div>
+<div class="line">  <a class="code" href="struct_c_x_i___file.html">CXI_File</a> * file = <a class="code" href="cxi_8h.html#aa1344e59fdd9a3ccba093d630d2d2c42">cxi_open_file</a>(filename,<span class="stringliteral">&quot;r&quot;</span>);</div>
+<div class="line">  <span class="keywordflow">if</span>(!file) <span class="keywordflow">return</span> -1;</div>
+<div class="line">  </div>
+<div class="line">  <span class="comment">/* Check that the CXI version is at least 1.10 */</span></div>
+<div class="line">  <span class="keywordflow">if</span>(file-&gt;<a class="code" href="struct_c_x_i___file.html#a34cd3bf1f215a043827e8b3daf21665c">cxi_version</a> &lt; 110){</div>
+<div class="line">    printf(<span class="stringliteral">&quot;Warning: CXI version is too low %d\n&quot;</span>,file-&gt;<a class="code" href="struct_c_x_i___file.html#a34cd3bf1f215a043827e8b3daf21665c">cxi_version</a>);</div>
+<div class="line">  }</div>
+<div class="line">  <span class="comment">/* /entry_1 */</span></div>
+<div class="line">  <a class="code" href="struct_c_x_i___entry.html">CXI_Entry</a> * entry_1 = <a class="code" href="cxi_8h.html#aa05f5df2d799f9e2be1178cb84e006ef">cxi_open_entry</a>(file-&gt;<a class="code" href="struct_c_x_i___file.html#a0ff1e790ff63d124a2ee7a61844ee8ee">entries</a>[0]);</div>
+<div class="line">  <span class="keywordflow">if</span>(entry_1-&gt;<a class="code" href="struct_c_x_i___entry.html#a2a37cb35387c47547a7bc433f74925c7">experiment_identifier</a>) printf(<span class="stringliteral">&quot;Experiment Identifier = %s\n&quot;</span>, entry_1-&gt;<a class="code" href="struct_c_x_i___entry.html#a2a37cb35387c47547a7bc433f74925c7">experiment_identifier</a>);</div>
+<div class="line">  <span class="keywordflow">if</span>(entry_1-&gt;<a class="code" href="struct_c_x_i___entry.html#a7642c0ec25d9878ac64b141c7e4aac81">start_time</a>) printf(<span class="stringliteral">&quot;Start Time = %s\n&quot;</span>, entry_1-&gt;<a class="code" href="struct_c_x_i___entry.html#a7642c0ec25d9878ac64b141c7e4aac81">start_time</a>);</div>
+<div class="line">  </div>
+<div class="line">  <span class="comment">/* /entry_1/sample_1 */</span></div>
+<div class="line">  <span class="keywordflow">if</span>(entry_1-&gt;<a class="code" href="struct_c_x_i___entry.html#a9e90456ffa6781e98758c9b423ef1012">sample_count</a> &gt;= 1){</div>
+<div class="line">    <a class="code" href="struct_c_x_i___sample.html">CXI_Sample</a> * sample_1 = <a class="code" href="cxi_8h.html#aa95a52e3cb9d217539aad5d32f4b090d">cxi_open_sample</a>(entry_1-&gt;<a class="code" href="struct_c_x_i___entry.html#abb8d7d9a224709cb6878f3deccf59722">samples</a>[0]);</div>
+<div class="line">    <span class="keywordflow">if</span>(sample_1-&gt;<a class="code" href="struct_c_x_i___sample.html#ad72a06527eb84a1afff3f2f4516263c2">name</a>) printf(<span class="stringliteral">&quot;Sample name = %s\n&quot;</span>, sample_1-&gt;<a class="code" href="struct_c_x_i___sample.html#ad72a06527eb84a1afff3f2f4516263c2">name</a>);</div>
+<div class="line">  }</div>
+<div class="line"></div>
+<div class="line">  <span class="comment">/* /entry_1/instrument_1 */</span></div>
+<div class="line">  <span class="keywordflow">if</span>(entry_1-&gt;<a class="code" href="struct_c_x_i___entry.html#a4ae4f59fb9b04436960ed8ac8afa7a65">instrument_count</a> &gt;= 1){</div>
+<div class="line">    <a class="code" href="struct_c_x_i___instrument.html">CXI_Instrument</a> * instrument_1 = <a class="code" href="cxi_8h.html#a79f39e523f40767e1c002d88b53b365e">cxi_open_instrument</a>(entry_1-&gt;<a class="code" href="struct_c_x_i___entry.html#a49ee378ae517b09142bd936e7d87eaa2">instruments</a>[0]);</div>
+<div class="line">    <span class="keywordflow">if</span>(instrument_1-&gt;<a class="code" href="struct_c_x_i___instrument.html#a632a1d3302c61fed82231771e275781f">name</a>) printf(<span class="stringliteral">&quot;Instrument name = %s\n&quot;</span>, instrument_1-&gt;<a class="code" href="struct_c_x_i___instrument.html#a632a1d3302c61fed82231771e275781f">name</a>);</div>
+<div class="line">    </div>
+<div class="line">    <span class="comment">/* /entry_1/instrument_1/source_1 */</span></div>
+<div class="line">    <span class="keywordflow">if</span>(instrument_1-&gt;<a class="code" href="struct_c_x_i___instrument.html#a0552c2b544cd29c73c8e03ebcbea9f4b">source_count</a> &gt;= 1){</div>
+<div class="line">      <a class="code" href="struct_c_x_i___source.html">CXI_Source</a> * source_1 = <a class="code" href="cxi_8h.html#ae6a88d75f88695b1967693893c180c59">cxi_open_source</a>(instrument_1-&gt;<a class="code" href="struct_c_x_i___instrument.html#ab1d844d0a34a17ab4b7778daee54f61d">sources</a>[0]);</div>
+<div class="line">      <span class="keywordflow">if</span>(source_1-&gt;<a class="code" href="struct_c_x_i___source.html#a9eb62a37eec2cf3bae1debfba52d37fb">energy_valid</a>) printf(<span class="stringliteral">&quot;Source energy = %g J\n&quot;</span>, source_1-&gt;<a class="code" href="struct_c_x_i___source.html#a737745312dc5d877c81f241da4ac215a">energy</a>);</div>
+<div class="line">      <span class="keywordflow">if</span>(source_1-&gt;<a class="code" href="struct_c_x_i___source.html#aff5be68e181f09f731aa524b14f72991">pulse_width_valid</a>) printf(<span class="stringliteral">&quot;Source pulse width = %g s\n&quot;</span>, source_1-&gt;<a class="code" href="struct_c_x_i___source.html#a18c00be279fb34306210ae1750cf020b">pulse_width</a>);</div>
+<div class="line">    }</div>
+<div class="line"></div>
+<div class="line">    <span class="comment">/* Read all detectors /entry_1/instrument_1/detector_n */</span></div>
+<div class="line">    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> n = 0;n&lt; instrument_1-&gt;<a class="code" href="struct_c_x_i___instrument.html#a9c8c174c03137b360ca613cbd03b1809">detector_count</a>; n++){</div>
+<div class="line">      <a class="code" href="struct_c_x_i___detector.html">CXI_Detector</a> * det = <a class="code" href="cxi_8h.html#a0368aff5eeb6d29ff64d8ebfc5b91969">cxi_open_detector</a>(instrument_1-&gt;<a class="code" href="struct_c_x_i___instrument.html#ac04f4b0c421a816aa63156b80de6d30f">detectors</a>[n]);      </div>
+<div class="line">      <span class="keywordflow">if</span>(det-&gt;<a class="code" href="struct_c_x_i___detector.html#a5c61e432be5648726d046deb188d776d">distance_valid</a>) printf(<span class="stringliteral">&quot;Detector_%d distance = %g m\n&quot;</span>, n+1, det-&gt;<a class="code" href="struct_c_x_i___detector.html#ad82291b636b8271a348f8613df4d598e">distance</a>);</div>
+<div class="line">      </div>
+<div class="line">      <span class="keywordflow">if</span>(det-&gt;<a class="code" href="struct_c_x_i___detector.html#a17d3b34fa218a9c8c14a8f7bf520eb14">data</a>){</div>
+<div class="line">        <span class="comment">/* Calculate the image mean */</span></div>
+<div class="line">        <a class="code" href="struct_c_x_i___dataset.html">CXI_Dataset</a> * dataset = <a class="code" href="cxi_8h.html#a97bc1bfcca33208f0d0c2dfad05e0db0">cxi_open_dataset</a>(det-&gt;<a class="code" href="struct_c_x_i___detector.html#a17d3b34fa218a9c8c14a8f7bf520eb14">data</a>);</div>
+<div class="line">        <span class="keywordtype">float</span> * data = malloc(<span class="keyword">sizeof</span>(<span class="keywordtype">float</span>)*<a class="code" href="cxi_8h.html#a69be05529d94e50ed3c11ec2e357f957">cxi_dataset_length</a>(dataset));</div>
+<div class="line">        <a class="code" href="cxi_8h.html#a9ddab554ef413f532c99a474bc184c3d">cxi_read_dataset</a>(dataset, data, H5T_NATIVE_FLOAT);</div>
+<div class="line">        <span class="keywordtype">double</span> sum = 0;</div>
+<div class="line">        <span class="keywordflow">for</span>(hsize_t i = 0; i &lt; <a class="code" href="cxi_8h.html#a69be05529d94e50ed3c11ec2e357f957">cxi_dataset_length</a>(dataset); i++){</div>
+<div class="line">          sum += data[i];</div>
+<div class="line">        }</div>
+<div class="line">        sum /= <a class="code" href="cxi_8h.html#a69be05529d94e50ed3c11ec2e357f957">cxi_dataset_length</a>(dataset);</div>
+<div class="line">        printf(<span class="stringliteral">&quot;Detector_%d data mean = %g ADUs/pixel\n&quot;</span>, n+1, sum);</div>
+<div class="line">      }</div>
+<div class="line">    }</div>
+<div class="line">  }  </div>
+<div class="line">  <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+<div class="line"></div>
+</div><!-- fragment --><h1><a class="anchor" id="writing_cxi"></a>
+3. Writing CXI files</h1>
+<h2><a class="anchor" id="writing_minimal_cxi"></a>
+3.1 Writing a minimal CXI file</h2>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;string.h&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;<a class="code" href="cxi_8h.html">cxi.h</a>&gt;</span></div>
+<div class="line"></div>
+<div class="line"><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> ** argv){</div>
+<div class="line">  <span class="keywordtype">char</span> * filename = <span class="stringliteral">&quot;typical_raw.cxi&quot;</span>;</div>
+<div class="line">  <span class="keywordflow">if</span>(argc &gt;= 2){</div>
+<div class="line">    <span class="keywordflow">if</span>(strcmp(argv[1],<span class="stringliteral">&quot;-h&quot;</span>) == 0){</div>
+<div class="line">      printf(<span class="stringliteral">&quot;Usage: simple_writer [output filename]\n\n&quot;</span>);</div>
+<div class="line"></div>
+<div class="line">      printf(<span class="stringliteral">&quot;By default the output filename is \&quot;typical_raw.cxi\&quot;\n&quot;</span>);</div>
+<div class="line">    }<span class="keywordflow">else</span>{</div>
+<div class="line">      filename = argv[1];</div>
+<div class="line">    }    </div>
+<div class="line">    <span class="keywordflow">return</span> 0;</div>
+<div class="line">  }</div>
+<div class="line">  <span class="comment">/* Open the file for writing*/</span></div>
+<div class="line">  <a class="code" href="struct_c_x_i___file.html">CXI_File</a> * file = <a class="code" href="cxi_8h.html#aa1344e59fdd9a3ccba093d630d2d2c42">cxi_open_file</a>(filename,<span class="stringliteral">&quot;w&quot;</span>);</div>
+<div class="line">  <span class="keywordflow">if</span>(!file) <span class="keywordflow">return</span> -1;</div>
+<div class="line">  </div>
+<div class="line">  <span class="comment">/* Create a bare Entry structure. </span></div>
+<div class="line"><span class="comment">   * It&#39;s *necessary* to zero it, so use calloc, *not* malloc. </span></div>
+<div class="line"><span class="comment">   */</span></div>
+<div class="line">  <a class="code" href="struct_c_x_i___entry.html">CXI_Entry</a> * entry = calloc(<span class="keyword">sizeof</span>(<a class="code" href="struct_c_x_i___entry.html">CXI_Entry</a>),1);</div>
+<div class="line"></div>
+<div class="line">  <span class="comment">/* Write the entry to the file */</span></div>
+<div class="line">  <a class="code" href="struct_c_x_i___entry___reference.html">CXI_Entry_Reference</a> * entry_ref = <a class="code" href="cxi_8h.html#a83ac23a0c0975df23e76dde487a5b1c0">cxi_write_entry</a>(file-&gt;<a class="code" href="struct_c_x_i___file.html#a289228d7f9d5e1c0b1846a9eb4247716">handle</a>,entry);</div>
+<div class="line">  <span class="keywordflow">if</span>(!entry_ref) <span class="keywordflow">return</span> -1;</div>
+<div class="line">  </div>
+<div class="line">  <span class="comment">/* Same for Data */</span></div>
+<div class="line">  <a class="code" href="struct_c_x_i___data.html">CXI_Data</a> * data = calloc(<span class="keyword">sizeof</span>(<a class="code" href="struct_c_x_i___data.html">CXI_Data</a>),1);  </div>
+<div class="line">  <a class="code" href="struct_c_x_i___data___reference.html">CXI_Data_Reference</a> * data_ref = <a class="code" href="cxi_8h.html#a72db6b7ce23c0634d9d72eba116bd5d2">cxi_write_data</a>(entry-&gt;<a class="code" href="struct_c_x_i___entry.html#acdde38cc986f992f582a7348c43d4b46">handle</a>,data);</div>
+<div class="line">  <span class="keywordflow">if</span>(!data_ref) <span class="keywordflow">return</span> -1;</div>
+<div class="line"></div>
+<div class="line">  <span class="comment">/* Prepare the Dataset */</span></div>
+<div class="line">  <a class="code" href="struct_c_x_i___dataset.html">CXI_Dataset</a> * dataset = calloc(<span class="keyword">sizeof</span>(<a class="code" href="struct_c_x_i___dataset.html">CXI_Dataset</a>),1);  </div>
+<div class="line">  dataset-&gt;<a class="code" href="struct_c_x_i___dataset.html#a234ce1e4fd71f2f9ec82bd01a52341f4">dimension_count</a> = 1;</div>
+<div class="line">  dataset-&gt;<a class="code" href="struct_c_x_i___dataset.html#a64af1793871218c6ef31fd57652ba001">dimensions</a> = malloc(<span class="keyword">sizeof</span>(hsize_t));</div>
+<div class="line">  dataset-&gt;<a class="code" href="struct_c_x_i___dataset.html#a64af1793871218c6ef31fd57652ba001">dimensions</a>[0] = 10;</div>
+<div class="line">  <span class="comment">/* The datatype to be used in the HDF5 file. */</span></div>
+<div class="line">  dataset-&gt;<a class="code" href="struct_c_x_i___dataset.html#a2c0f243d54383d54656c59691d24dc0a">data_type</a> = H5T_NATIVE_SHORT;</div>
+<div class="line">  <span class="comment">/* Create the dataset in the file. */</span></div>
+<div class="line">  <a class="code" href="struct_c_x_i___dataset___reference.html">CXI_Dataset_Reference</a> * dataset_ref  = <a class="code" href="cxi_8h.html#aa8ee124700c687b4e1554a44581012cf">cxi_create_dataset</a>(data-&gt;<a class="code" href="struct_c_x_i___data.html#a65e31c30d79f927156cdedd197f0bf6e">handle</a>, dataset, <a class="code" href="cxi_8h.html#a8e7135ee8f4f964428e5fae73348af2fa3ccfaa09906e6da8481e00afb653d1e5">CXI_Data_Type</a>);</div>
+<div class="line">  <span class="keywordflow">if</span>(!dataset_ref) <span class="keywordflow">return</span> -1;</div>
+<div class="line">  </div>
+<div class="line">  <span class="keywordtype">int</span> data_buffer[10] = {1,2,3,4,5,6,7,8,9,10};</div>
+<div class="line">  <span class="comment">/* Write data to dataset. Specify the datatype of the data in memory. */</span></div>
+<div class="line">  <span class="keywordflow">if</span>(<a class="code" href="cxi_8h.html#ac751ae8cf34497773a50f75d994898a9">cxi_write_dataset</a>(dataset, data_buffer, H5T_NATIVE_INT)) <span class="keywordflow">return</span> -1;</div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line">  <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
 </div><!-- fragment --> </div></div><!-- contents -->
 <!-- HTML footer for doxygen 1.8.5-->
 <!-- start footer part -->

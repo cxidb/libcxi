@@ -4,7 +4,6 @@ var searchData=
   ['data_5fcount',['data_count',['../struct_c_x_i___entry.html#abd62e24b28afa65d038cc3d56916e49e',1,'CXI_Entry']]],
   ['data_5fdark',['data_dark',['../struct_c_x_i___detector.html#ab989ae02bb60bfb2a73c0e69f814d06f',1,'CXI_Detector']]],
   ['data_5ferror',['data_error',['../struct_c_x_i___detector.html#a92d3b27b63a2497d94ccd40428380e19',1,'CXI_Detector::data_error()'],['../struct_c_x_i___image.html#aa777eff49ff8169214cf8e72522ce553',1,'CXI_Image::data_error()']]],
-  ['data_5fsize',['data_size',['../struct_c_x_i___dataset.html#aa303786dc5d5a5e2b742f74fac37cae7',1,'CXI_Dataset']]],
   ['data_5fspace',['data_space',['../struct_c_x_i___image.html#a831a89ebeeda36645bd970d72f7b37d1',1,'CXI_Image']]],
   ['data_5fsum',['data_sum',['../struct_c_x_i___detector.html#ac88b4105ddf5e843bc6235a000913a82',1,'CXI_Detector']]],
   ['data_5fsum_5fvalid',['data_sum_valid',['../struct_c_x_i___detector.html#a18c00c63ba7839b2eb281091c282bf6f',1,'CXI_Detector']]],

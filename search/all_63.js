@@ -70,6 +70,7 @@ var searchData=
   ['cxi_5fthree_5fdimensional',['CXI_Three_Dimensional',['../cxi_8h.html#a73003ed8f41623f3d7f6d8dd5f671ed0ac8273452748d996e759889488a23f125',1,'cxi.h']]],
   ['cxi_5ftwo_5fdimensional',['CXI_Two_Dimensional',['../cxi_8h.html#a73003ed8f41623f3d7f6d8dd5f671ed0a5c9702c8538efe329f6885c5e9836700',1,'cxi.h']]],
   ['cxi_5funphased_5famplitude_5ftype',['CXI_Unphased_Amplitude_Type',['../cxi_8h.html#ac52ce5460e5113266b059947bd0db50ca1d9367765c85d1409a82fbadde50acea',1,'cxi.h']]],
+  ['cxi_5fversion',['cxi_version',['../struct_c_x_i___file.html#a34cd3bf1f215a043827e8b3daf21665c',1,'CXI_File']]],
   ['cxi_5fwrite_5fattenuator',['cxi_write_attenuator',['../cxi_8h.html#a3688522b573ded00c8e5916e6d35eaf9',1,'cxi.c']]],
   ['cxi_5fwrite_5fdata',['cxi_write_data',['../cxi_8h.html#a72db6b7ce23c0634d9d72eba116bd5d2',1,'cxi.c']]],
   ['cxi_5fwrite_5fdataset',['cxi_write_dataset',['../cxi_8h.html#ac751ae8cf34497773a50f75d994898a9',1,'cxi.c']]],
