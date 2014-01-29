@@ -9,10 +9,10 @@ int main(int argc, char ** argv){
       printf("Usage: simple_writer [output filename]\n\n");
 
       printf("By default the output filename is \"typical_raw.cxi\"\n");
+      return 0;
     }else{
       filename = argv[1];
     }    
-    return 0;
   }
   /* Open the file for writing*/
   CXI_File * file = cxi_open_file(filename,"w");
