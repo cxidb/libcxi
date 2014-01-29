@@ -17,6 +17,15 @@ target_link_libraries(simple ${HDF5_LIBRARIES})
 add_executable(writer EXCLUDE_FROM_ALL src/cxi.c tests/writer.c)
 target_link_libraries(writer ${HDF5_LIBRARIES})
 
+add_executable(typical_reader  src/cxi.c examples/typical_reader.c)
+target_link_libraries(typical_reader ${HDF5_LIBRARIES})
+
+add_executable(simple_reader  src/cxi.c examples/simple_reader.c)
+target_link_libraries(simple_reader ${HDF5_LIBRARIES})
+
+add_executable(simple_writer  src/cxi.c examples/simple_writer.c)
+target_link_libraries(simple_writer ${HDF5_LIBRARIES})
+
 
 enable_testing()
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})

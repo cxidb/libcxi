@@ -279,8 +279,13 @@ CXI_File * cxi_open_file(const char * filename, const char * mode){
   }
   if(strcmp(mode,"r") == 0){
     file->handle = H5Fopen(filename, H5F_ACC_RDONLY,H5P_DEFAULT);
+    if(file->handle < 0){
+      free(file);
+      return NULL;
+    }
     file->filename = malloc(sizeof(char)*(strlen(filename)+1));
     strcpy(file->filename,filename);
+    /* Read existing entries */
     int n = find_max_suffix(file->handle, "entry");
     file->entry_count = n;
     file->entries = calloc(sizeof(CXI_Entry_Reference *),n);
@@ -291,6 +296,14 @@ CXI_File * cxi_open_file(const char * filename, const char * mode){
       file->entries[i]->parent_handle = file->handle;
       file->entries[i]->group_name = malloc(sizeof(char)*(strlen(buffer)+1));
       strcpy(file->entries[i]->group_name,buffer);      
+    }
+    /* Read the CXI verion */
+    file->cxi_version = -1;
+    try_copy_int(file->handle, "cxi_version",&file->cxi_version);
+    if(file->cxi_version < 0){
+      /* Warning: Could not read CXI version */
+    }else if(file->cxi_version >= CXI_VERSION){
+      /* Warning: CXI version of the file is higher than from libcxi */
     }
     return file;    
   }else if(strcmp(mode,"w") == 0){
@@ -558,9 +571,10 @@ CXI_Source * cxi_open_source(CXI_Source_Reference * ref){
   ref->source = source;
 
   try_copy_string(source->handle, "name",&source->name);
-  try_copy_float(source->handle, "energy",&source->energy);
-  try_copy_float(source->handle, "pulse_energy",&source->pulse_energy);
-  try_copy_float(source->handle, "pulse_width",&source->pulse_width);
+  source->energy_valid = try_copy_float(source->handle, "energy",&source->energy);
+  source->pulse_energy_valid = try_copy_float(source->handle, "pulse_energy",&source->pulse_energy);
+  source->pulse_width_valid = try_copy_float(source->handle, "pulse_width",&source->pulse_width);
+
   return source;
 }
 
@@ -759,10 +773,10 @@ CXI_Attenuator * cxi_open_attenuator(CXI_Attenuator_Reference * ref){
     return NULL;
   }
   ref->attenuator = attenuator;  
-  try_copy_float(attenuator->handle, "distance",&attenuator->distance);
-  try_copy_float(attenuator->handle, "thickness",&attenuator->thickness);
-  try_copy_float(attenuator->handle, "attenuator_transmission",
-		 &attenuator->attenuator_transmission);
+  attenuator->distance_valid = try_copy_float(attenuator->handle, "distance",&attenuator->distance);
+  attenuator->thickness_valid = try_copy_float(attenuator->handle, "thickness",&attenuator->thickness);
+  attenuator->attenuator_transmission_valid = try_copy_float(attenuator->handle, "attenuator_transmission",
+							     &attenuator->attenuator_transmission);
   try_copy_string(attenuator->handle, "type",&attenuator->type);
 
 
@@ -798,8 +812,8 @@ CXI_Monochromator * cxi_open_monochromator(CXI_Monochromator_Reference * ref){
     return NULL;
   }
   ref->monochromator = monochromator;  
-  try_copy_float(monochromator->handle, "energy",&monochromator->energy);
-  try_copy_float(monochromator->handle, "energy_error",&monochromator->energy_error);
+  monochromator->energy_valid = try_copy_float(monochromator->handle, "energy",&monochromator->energy);
+  monochromator->energy_error = try_copy_float(monochromator->handle, "energy_error",&monochromator->energy_error);
   return monochromator;
 }
 
@@ -870,8 +884,8 @@ CXI_Image * cxi_open_image(CXI_Image_Reference * ref){
 
   //  try_copy_string(image->handle, "data_space",&image->data_space);
   //  try_copy_string(image->handle, "data_type",&image->data_type);
-  try_copy_int(image->handle, "dimensionality",&image->dimensionality);
-  try_copy_float_array(image->handle, "image_center",image->image_center,3);
+  image->dimensionality_valid = try_copy_int(image->handle, "dimensionality",&image->dimensionality);
+  image->image_center_valid = try_copy_float_array(image->handle, "image_center",image->image_center,3);
 
   return image;
 }

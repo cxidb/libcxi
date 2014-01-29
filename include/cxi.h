@@ -39,6 +39,16 @@
  *
  * \include examples/simple_reader.c
  *
+ * \subsection reading_typical_cxi 2.2 Reading a more typical CXI file
+ *
+ * \include examples/typical_reader.c
+ *
+ * \section writing_cxi 3. Writing CXI files
+ *
+ * \subsection writing_minimal_cxi 3.1 Writing a minimal CXI file
+ *
+ * \include examples/simple_writer.c
+ *
  */
 #pragma once 
 
@@ -128,8 +138,6 @@ extern "C"{
     hsize_t * dimensions;
     /*! The number of dimensions of the dataset or 0 if not set. */
     int dimension_count;
-    /*! The total size of the dataset in bytes or 0 if not set. */
-    hsize_t data_size;
     /*! The HDF5 data type of the element of the dataset, or 0 if not set. */
     hid_t data_type;    
   }CXI_Dataset;
@@ -753,6 +761,12 @@ extern "C"{
     /*! The number of CXI entries in the HDF5 root of this file.
      */
     int entry_count;
+    /*! The version of the CXI file as an integer. 
+     * This corresponds to 100x the typical version number. 
+     * For example 130 corresponds to 1.30. 
+     * A negative value indicates the value was not set/read.
+     */
+    int cxi_version;
   }CXI_File;
 
 
