@@ -892,86 +892,88 @@ extern "C"{
    */
   int cxi_read_dataset_slice(CXI_Dataset * dataset, unsigned int slice, void * data, hid_t data_type);
 
-  /*! Write a entry group.
+  /*! Create an entry group and its children.
    * 
    * \param loc An HDF5 identifier specifying the location where the dataset will be created.
    * \param entry A filled structure which determines the properties of the created entry.
    *
    * \return A reference to the \p entry created or NULL in case of error.
    */
-  CXI_Entry_Reference * cxi_write_entry(hid_t loc, CXI_Entry * entry);
-  /*! Write a data group.
+  CXI_Entry_Reference * cxi_create_entry(hid_t loc, CXI_Entry * entry);
+
+  /*! Create a data group and its children.
    * 
    * \param loc An HDF5 identifier specifying the location where the dataset will be created.
    * \param data A filled structure which determines the properties of the created data.
    *
    * \return A reference to the \p data created or NULL in case of error.
    */
-  CXI_Data_Reference * cxi_write_data(hid_t loc, CXI_Data * data);
-  /*! Write a image group.
+  CXI_Data_Reference * cxi_create_data(hid_t loc, CXI_Data * data);
+  /*! Create a image group and its children.
    * 
    * \param loc An HDF5 identifier specifying the location where the dataset will be created.
    * \param image A filled structure which determines the properties of the created image.
    *
    * \return A reference to the \p image created or NULL in case of error.
    */
-  CXI_Image_Reference * cxi_write_image(hid_t loc, CXI_Image * image);
-  /*! Write a detector group.
+  CXI_Image_Reference * cxi_create_image(hid_t loc, CXI_Image * image);
+
+  /*! Create a detector group and its children.
    * 
    * \param loc An HDF5 identifier specifying the location where the dataset will be created.
    * \param detector A filled structure which determines the properties of the created detector.
    *
    * \return A reference to the \p image created or NULL in case of error.
    */
-  CXI_Detector_Reference * cxi_write_detector(hid_t loc, CXI_Detector * detector);
-  /*! Write a instrument group.
+  CXI_Detector_Reference * cxi_create_detector(hid_t loc, CXI_Detector * detector);
+  /*! Create a instrument group and its children.
    * 
    * \param loc An HDF5 identifier specifying the location where the dataset will be created.
    * \param instrument A filled structure which determines the properties of the created instrument.
    *
    * \return A reference to the \p instrument created or NULL in case of error.
    */
-  CXI_Instrument_Reference * cxi_write_instrument(hid_t loc, CXI_Instrument * instrument);
-  /*! Write a sample group.
+  CXI_Instrument_Reference * cxi_create_instrument(hid_t loc, CXI_Instrument * instrument);
+  /*! Create a sample group and its children.
    * 
    * \param loc An HDF5 identifier specifying the location where the dataset will be created.
    * \param sample A filled structure which determines the properties of the created sample.
    *
    * \return A reference to the \p sample created or NULL in case of error.
    */
-  CXI_Sample_Reference * cxi_write_sample(hid_t loc, CXI_Sample * sample);
-  /*! Write a attenuator group.
+  CXI_Sample_Reference * cxi_create_sample(hid_t loc, CXI_Sample * sample);
+  /*! Create a attenuator group and its children.
    * 
    * \param loc An HDF5 identifier specifying the location where the dataset will be created.
    * \param attenuator A filled structure which determines the properties of the created attenuator.
    *
    * \return A reference to the \p attenuator created or NULL in case of error.
    */
-  CXI_Attenuator_Reference * cxi_write_attenuator(hid_t loc, CXI_Attenuator * attenuator);
-  /*! Write a monochromator group.
+  CXI_Attenuator_Reference * cxi_create_attenuator(hid_t loc, CXI_Attenuator * attenuator);
+  /*! Create a monochromator group and its children.
    * 
    * \param loc An HDF5 identifier specifying the location where the dataset will be created.
    * \param monochromator A filled structure which determines the properties of the created monochromator.
    *
    * \return A reference to the \p monochromator created or NULL in case of error.
    */
-  CXI_Monochromator_Reference * cxi_write_monochromator(hid_t loc, CXI_Monochromator * monochromator);
-  /*! Write a source group.
+  CXI_Monochromator_Reference * cxi_create_monochromator(hid_t loc, CXI_Monochromator * monochromator);
+  /*! Create a source group and its children.
    * 
    * \param loc An HDF5 identifier specifying the location where the dataset will be created.
    * \param source A filled structure which determines the properties of the created source.
    *
    * \return A reference to the \p source created or NULL in case of error.
    */
-  CXI_Source_Reference * cxi_write_source(hid_t loc, CXI_Source * source);
-  /*! Write a process group.
+  CXI_Source_Reference * cxi_create_source(hid_t loc, CXI_Source * source);
+  /*! Create a process group and its children.
    * 
    * \param loc An HDF5 identifier specifying the location where the dataset will be created.
    * \param process A filled structure which determines the properties of the created process.
    *
    * \return A reference to the \p process created or NULL in case of error.
    */
-  CXI_Process_Reference * cxi_write_process(hid_t loc, CXI_Process * process);
+  CXI_Process_Reference * cxi_create_process(hid_t loc, CXI_Process * process);
 
   /*! Create a new dataset.
    * 
@@ -1064,6 +1066,26 @@ extern "C"{
    * \return The total number of element in the dataset.
    */
   hsize_t cxi_dataset_length(CXI_Dataset * dataset);
+
+  /*! Calculate the total number of elements in a slice of a dataset
+   *
+   * \param dataset The \p dataset used to calculate the size.
+   *
+   * \return The total number of element of a slice of the dataset.
+   * This corresponds to the product of all but the slowest changing dimension.
+   * For one dimensional datasets this is 1.
+   */
+  hsize_t cxi_dataset_slice_length(CXI_Dataset * dataset);
+
+  /*! Creates a Data group inside the given entry and makes it point to the given data.
+   * 
+   * \param entry The CXI_Entry under which the Data group will be created.
+   * \param data The CXI_Dataset to link to.
+   *
+   * \return A reference to the \p CXI_Data group created or NULL in case of error.
+   *
+   */
+  CXI_Data_Reference * cxi_create_data_link(CXI_Entry * entry, CXI_Dataset * data);
 
 #ifdef __cplusplus 
 } /* extern "C" */

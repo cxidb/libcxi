@@ -24,12 +24,12 @@ int main(int argc, char ** argv){
   CXI_Entry * entry = calloc(sizeof(CXI_Entry),1);
 
   /* Write the entry to the file */
-  CXI_Entry_Reference * entry_ref = cxi_write_entry(file->handle,entry);
+  CXI_Entry_Reference * entry_ref = cxi_create_entry(file->handle,entry);
   if(!entry_ref) return -1;
   
   /* Same for Data */
   CXI_Data * data = calloc(sizeof(CXI_Data),1);  
-  CXI_Data_Reference * data_ref = cxi_write_data(entry->handle,data);
+  CXI_Data_Reference * data_ref = cxi_create_data(entry->handle,data);
   if(!data_ref) return -1;
 
   /* Prepare the Dataset */

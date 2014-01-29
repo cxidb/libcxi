@@ -1033,7 +1033,7 @@ int cxi_read_dataset_slice(CXI_Dataset * dataset, unsigned int slice, void * dat
 }
 
 
-CXI_Entry_Reference * cxi_write_entry(hid_t loc, CXI_Entry * entry){
+CXI_Entry_Reference * cxi_create_entry(hid_t loc, CXI_Entry * entry){
   if(loc < 0 || !entry){
     return NULL;
   }
@@ -1084,7 +1084,7 @@ CXI_Entry_Reference * cxi_write_entry(hid_t loc, CXI_Entry * entry){
   if(entry->data){
     for(int i = 0;i<entry->data_count;i++){
       if(entry->data[i]->data){
-	cxi_write_data(entry->handle,entry->data[i]->data);
+	cxi_create_data(entry->handle,entry->data[i]->data);
       }else{
 	cxi_warning("Data Reference data[%d] has NULL data pointer\n", i);
       }
@@ -1093,7 +1093,7 @@ CXI_Entry_Reference * cxi_write_entry(hid_t loc, CXI_Entry * entry){
   if(entry->images){
     for(int i = 0;i<entry->image_count;i++){
       if(entry->images[i]->image){
-	cxi_write_image(entry->handle,entry->images[i]->image);
+	cxi_create_image(entry->handle,entry->images[i]->image);
       }else{
 	cxi_warning(" Image Reference images[%d] has NULL image pointer\n", i);
       }
@@ -1102,7 +1102,7 @@ CXI_Entry_Reference * cxi_write_entry(hid_t loc, CXI_Entry * entry){
   if(entry->instruments){
     for(int i = 0;i<entry->instrument_count;i++){
       if(entry->instruments[i]->instrument){
-	cxi_write_instrument(entry->handle,entry->instruments[i]->instrument);
+	cxi_create_instrument(entry->handle,entry->instruments[i]->instrument);
       }else{
 	cxi_warning("Instrument Reference instruments[%d] has NULL instrument pointer\n", i);
       }
@@ -1112,7 +1112,7 @@ CXI_Entry_Reference * cxi_write_entry(hid_t loc, CXI_Entry * entry){
   if(entry->samples){
     for(int i = 0;i<entry->sample_count;i++){
       if(entry->samples[i]->sample){
-	cxi_write_sample(entry->handle,entry->samples[i]->sample);
+	cxi_create_sample(entry->handle,entry->samples[i]->sample);
       }else{
 	cxi_warning("Sample Reference samples[%d] has NULL sample pointer\n", i);
       }
@@ -1121,7 +1121,7 @@ CXI_Entry_Reference * cxi_write_entry(hid_t loc, CXI_Entry * entry){
   return ref;  
 }
 
-CXI_Data_Reference * cxi_write_data(hid_t loc, CXI_Data * data){
+CXI_Data_Reference * cxi_create_data(hid_t loc, CXI_Data * data){
   if(loc < 0 || !data){
     return NULL;
   }
@@ -1141,7 +1141,7 @@ CXI_Data_Reference * cxi_write_data(hid_t loc, CXI_Data * data){
   return ref;
 
 }
-CXI_Image_Reference * cxi_write_image(hid_t loc, CXI_Image * image){
+CXI_Image_Reference * cxi_create_image(hid_t loc, CXI_Image * image){
   if(loc < 0 || !image){
     return NULL;
   }
@@ -1161,7 +1161,7 @@ CXI_Image_Reference * cxi_write_image(hid_t loc, CXI_Image * image){
   return ref;
 
 }
-CXI_Instrument_Reference * cxi_write_instrument(hid_t loc, CXI_Instrument * instrument){
+CXI_Instrument_Reference * cxi_create_instrument(hid_t loc, CXI_Instrument * instrument){
   if(loc < 0 || !instrument){
     return NULL;
   }
@@ -1181,7 +1181,7 @@ CXI_Instrument_Reference * cxi_write_instrument(hid_t loc, CXI_Instrument * inst
   return ref;
 
 }
-CXI_Sample_Reference * cxi_write_sample(hid_t loc, CXI_Sample * sample){
+CXI_Sample_Reference * cxi_create_sample(hid_t loc, CXI_Sample * sample){
   if(loc < 0 || !sample){
     return NULL;
   }
@@ -1233,7 +1233,7 @@ CXI_Sample_Reference * cxi_write_sample(hid_t loc, CXI_Sample * sample){
 
 }
 
-CXI_Monochromator_Reference * cxi_write_monochromator(hid_t loc, CXI_Monochromator * monochromator){
+CXI_Monochromator_Reference * cxi_create_monochromator(hid_t loc, CXI_Monochromator * monochromator){
   if(loc < 0 || !monochromator){
     return NULL;
   }
@@ -1255,7 +1255,7 @@ CXI_Monochromator_Reference * cxi_write_monochromator(hid_t loc, CXI_Monochromat
 }
 
 
-CXI_Attenuator_Reference * cxi_write_attenuator(hid_t loc, CXI_Attenuator * attenuator){
+CXI_Attenuator_Reference * cxi_create_attenuator(hid_t loc, CXI_Attenuator * attenuator){
   if(loc < 0 || !attenuator){
     return NULL;
   }
@@ -1275,7 +1275,7 @@ CXI_Attenuator_Reference * cxi_write_attenuator(hid_t loc, CXI_Attenuator * atte
   return ref;
 }
 
-CXI_Source_Reference * cxi_write_source(hid_t loc, CXI_Source * source){
+CXI_Source_Reference * cxi_create_source(hid_t loc, CXI_Source * source){
   if(loc < 0 || !source){
     return NULL;
   }
@@ -1305,7 +1305,7 @@ CXI_Source_Reference * cxi_write_source(hid_t loc, CXI_Source * source){
 
 }
 
-CXI_Detector_Reference * cxi_write_detector(hid_t loc, CXI_Detector * detector){
+CXI_Detector_Reference * cxi_create_detector(hid_t loc, CXI_Detector * detector){
   if(loc < 0 || !detector){
     return NULL;
   }
@@ -1349,7 +1349,7 @@ CXI_Detector_Reference * cxi_write_detector(hid_t loc, CXI_Detector * detector){
   return ref;
 }
 
-CXI_Geometry_Reference * cxi_write_geometry(hid_t loc, CXI_Geometry * geometry){
+CXI_Geometry_Reference * cxi_create_geometry(hid_t loc, CXI_Geometry * geometry){
   if(loc < 0 || !geometry){
     return NULL;
   }
@@ -1369,7 +1369,7 @@ CXI_Geometry_Reference * cxi_write_geometry(hid_t loc, CXI_Geometry * geometry){
   return ref;
 }
 
-CXI_Process_Reference * cxi_write_process(hid_t loc, CXI_Process * process){
+CXI_Process_Reference * cxi_create_process(hid_t loc, CXI_Process * process){
   if(loc < 0 || !process){
     return NULL;
   }
@@ -1494,4 +1494,37 @@ hsize_t cxi_dataset_length(CXI_Dataset * dataset){
     ret *= dataset->dimensions[i];
   }
   return ret;
+}
+
+hsize_t cxi_dataset_slice_length(CXI_Dataset * dataset){
+  if(!dataset){
+    return 0;
+  }
+  if(!dataset->dimensions){
+    return 0;
+  }
+  if(dataset->dimension_count <= 0){
+    return 0;
+  }
+  return cxi_dataset_length(dataset)/dataset->dimensions[0];
+}
+
+CXI_Data_Reference * cxi_create_data_link(CXI_Entry * entry, CXI_Dataset * data){
+  if(!entry || ! data){
+    return NULL;
+  }
+  if(entry->handle <= 0 || data->handle <= 0){
+    return NULL;
+  }
+  CXI_Data * root_data = calloc(sizeof(CXI_Data),1);
+  CXI_Data_Reference * data_ref = cxi_create_data(entry->handle,root_data);
+  if(!data_ref) return NULL;
+  char path[1024];
+  if(H5Iget_name(data->handle, path, 1024) <= 0){
+    return NULL;
+  }
+  if(H5Lcreate_soft(path, root_data->handle, "data", H5P_DEFAULT, H5P_DEFAULT) < 0){
+    return NULL;
+  }
+  return data_ref;
 }

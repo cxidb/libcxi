@@ -17,7 +17,7 @@ int main(int argc, char ** argv){
   entry->title = strdup("Dummy entry");
   
 
-  CXI_Entry_Reference * entry_ref = cxi_write_entry(file->handle,entry);
+  CXI_Entry_Reference * entry_ref = cxi_create_entry(file->handle,entry);
   if(!entry_ref){
     return -1;
   }

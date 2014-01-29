@@ -57,8 +57,8 @@ int main(int argc, char ** argv){
 
 
   CXI_Dataset * data_dataset = cxi_open_dataset(det->data);
-  float * image = malloc(sizeof(float)*data_dataset->size);
-  float * slice = malloc(sizeof(float)*data_dataset->slice_size);
+  float * image = malloc(sizeof(float)*cxi_dataset_length(data_dataset));
+  float * slice = malloc(sizeof(float)*cxi_dataset_slice_length(data_dataset));
   if(!image || !slice){
     return  -1;
   }
