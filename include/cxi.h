@@ -783,6 +783,10 @@ extern "C"{
   }CXI_File;
 
 
+/*! \addtogroup file Opening/Creating CXI Files
+ *  \{
+ */
+
   /*! Open or create a new CXI file.
    * 
    * \param filename The name of the file.
@@ -802,6 +806,13 @@ extern "C"{
    */
   int cxi_close_file(CXI_File * file);
 
+/*! \} // file file Opening/Creating CXI Files
+ */
+
+/*! \addtogroup reading Reading CXI files
+ *  \{
+ */
+
   /*! Open a CXI Entry 
    *
    * \param entry A reference to the entry to be opened.
@@ -809,6 +820,7 @@ extern "C"{
    * \return The opened \p CXI_Entry or NULL is case of error.
    */
   CXI_Entry * cxi_open_entry(CXI_Entry_Reference * entry);
+
 
   /*! Open a CXI Instrument 
    *
@@ -891,6 +903,13 @@ extern "C"{
    * \return Zero if successful or a negative number in case of error.
    */
   int cxi_read_dataset_slice(CXI_Dataset * dataset, unsigned int slice, void * data, hid_t data_type);
+
+/*! \} // reading
+ */
+
+/*! \addtogroup writing Writing CXI Files
+ *  \{
+ */
 
   /*! Create an entry group and its children.
    * 
@@ -1058,6 +1077,22 @@ extern "C"{
    */
   int cxi_write_dataset_slice(CXI_Dataset * dataset, unsigned int slice, void * data, hid_t data_type);
 
+  /*! Creates a Data group inside the given entry and makes it point to the given data.
+   * 
+   * \param entry The CXI_Entry under which the Data group will be created.
+   * \param data The CXI_Dataset to link to.
+   *
+   * \return A reference to the \p CXI_Data group created or NULL in case of error.
+   *
+   */
+  CXI_Data_Reference * cxi_create_data_link(CXI_Entry * entry, CXI_Dataset * data);
+
+/*! \} // writing
+ */
+
+/*! \addtogroup utility Dataset Utilities
+ *  \{
+ */
 
   /*! Calculate the total number of elements in a dataset
    *
@@ -1077,15 +1112,9 @@ extern "C"{
    */
   hsize_t cxi_dataset_slice_length(CXI_Dataset * dataset);
 
-  /*! Creates a Data group inside the given entry and makes it point to the given data.
-   * 
-   * \param entry The CXI_Entry under which the Data group will be created.
-   * \param data The CXI_Dataset to link to.
-   *
-   * \return A reference to the \p CXI_Data group created or NULL in case of error.
-   *
-   */
-  CXI_Data_Reference * cxi_create_data_link(CXI_Entry * entry, CXI_Dataset * data);
+/*! \} // utility
+ */
+
 
 #ifdef __cplusplus 
 } /* extern "C" */
