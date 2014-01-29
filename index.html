@@ -208,10 +208,10 @@ Step 2: Building the library</h2>
 <div class="line">      printf(<span class="stringliteral">&quot;Usage: simple_writer [output filename]\n\n&quot;</span>);</div>
 <div class="line"></div>
 <div class="line">      printf(<span class="stringliteral">&quot;By default the output filename is \&quot;typical_raw.cxi\&quot;\n&quot;</span>);</div>
+<div class="line">      <span class="keywordflow">return</span> 0;</div>
 <div class="line">    }<span class="keywordflow">else</span>{</div>
 <div class="line">      filename = argv[1];</div>
 <div class="line">    }    </div>
-<div class="line">    <span class="keywordflow">return</span> 0;</div>
 <div class="line">  }</div>
 <div class="line">  <span class="comment">/* Open the file for writing*/</span></div>
 <div class="line">  <a class="code" href="struct_c_x_i___file.html">CXI_File</a> * file = <a class="code" href="cxi_8h.html#aa1344e59fdd9a3ccba093d630d2d2c42">cxi_open_file</a>(filename,<span class="stringliteral">&quot;w&quot;</span>);</div>
